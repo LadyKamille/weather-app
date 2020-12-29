@@ -7,3 +7,6 @@
 # IDE
 .idea/
 .eslintcache
+
+# Environment
+.env
