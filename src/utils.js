@@ -4,8 +4,13 @@ export const fetchWeather = cityName => {
 
   if (cityName) {
     return fetch(`${BASE_URL}/data/2.5/forecast?q=${cityName}&appid=${API_KEY}`)
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
+      .then(async (response) => {
+        const result = await response.json()
+        if (!response.ok) {
+          throw new Error(result?.message)
+        }
+        return result;
+      })
+      .catch((error) => Promise.reject(error));
   }
 };

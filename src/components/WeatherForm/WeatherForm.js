@@ -1,15 +1,32 @@
 import React from 'react';
+import { Button, Form, Input } from 'antd';
 
-export const WeatherForm = () => (
-  <form role='search' action="/" method="get">
-    <label htmlFor='header-search'>
-      <span className='visually-hidden'>Search</span>
-    </label>
+export const WeatherForm = ({onSearchHandler}) => {
+  const [form] = Form.useForm();
 
-    <input type='text' id='header-search'/>
+  const onFinish = (values) => {
+    onSearchHandler(values.search);
+  };
 
-    <button type='submit'>
-      <span className='visually-hidden'>Submit Search</span>
-    </button>
-  </form>
-);
+  return (
+    <Form
+      form={form}
+      layout="inline"
+      name="weather_search"
+      onFinish={onFinish}
+      role="search"
+    >
+      <Form.Item
+        label="Search"
+        name="search"
+        rules={[{ required: true, message: 'Please enter a search term!' }]}
+      >
+        <Input/>
+      </Form.Item>
+
+      <Button type="primary" htmlType="submit">
+        Submit
+      </Button>
+    </Form>
+  );
+};

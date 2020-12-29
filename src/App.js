@@ -1,5 +1,6 @@
 import React from 'react';
 import { ForecastList } from './containers/ForecastList/ForecastList';
+import 'antd/dist/antd.css';
 import './App.css';
 
 function App() {
