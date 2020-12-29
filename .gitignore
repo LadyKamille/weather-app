@@ -3,3 +3,7 @@
 
 # production
 /build
+
+# IDE
+.idea/
+.eslintcache
