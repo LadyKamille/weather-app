@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { List, notification } from 'antd';
+import { Col, Row, Spin } from 'antd';
 import { DailyForecastCard } from '../../components/DailyForecastCard/DailyForecastCard';
 import { WeatherForm } from '../../components/WeatherForm/WeatherForm';
-import { fetchWeather } from '../../utils';
+import { fetchWeather, mergeDailyForecast } from '../../utils';
 
 export const ForecastList = () => {
   const [loading, setLoading] = useState(false);
@@ -12,14 +12,10 @@ export const ForecastList = () => {
     try {
       setLoading(true);
       const response = await fetchWeather(location);
-      setWeather(response?.list);
+      const mappedForecast = mergeDailyForecast(response?.list);
+      setWeather(mappedForecast);
       setLoading(false);
-      console.log('weather', weather);
     } catch(error) {
-      notification.error({
-        message: 'Error',
-        description: error.message,
-      });
       setLoading(false);
     }
   };
@@ -27,16 +23,19 @@ export const ForecastList = () => {
   return (
     <>
       <WeatherForm onSearchHandler={onSearchHandler}/>
-      <List
-        grid={{ gutter: 16, column: 4 }}
-        dataSource={weather}
-        loading={loading}
-        renderItem={dailyForecast => (
-          <List.Item>
-            <DailyForecastCard weather={dailyForecast} />
-          </List.Item>
-        )}
-      />
+      {
+        loading ?
+          <Spin /> :
+          <Row gutter={[0, 16]}>
+            {
+              Object.entries(weather).map(([day, hourly]) => (
+                <Col span={4}>
+                  <DailyForecastCard day={day} hourlyForecast={hourly}/>
+                </Col>
+              ))
+            }
+          </Row>
+      }
     </>
   );
 };
